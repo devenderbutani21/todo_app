@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,8 +13,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Todo List',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
-        canvasColor: Colors.orangeAccent.shade100,
+        primarySwatch: Colors.lightBlue,
+        canvasColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: TodoList(),
@@ -48,9 +50,21 @@ class TodoListState extends State<TodoList> {
   }
   
   Widget _buildTodoItem(String todoText, int index) {
-    return ListTile(
-     title: Text(todoText),
-      onTap: () => _promptRemoveTodoItem(index),
+    return Card (
+//      shape: RoundedRectangleBorder(
+//        borderRadius: BorderRadius.circular(5.0),
+//      ),
+      color: Colors.lightBlueAccent,
+      child: ListTile(
+        title: Text(
+          todoText,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        onTap: () => _promptRemoveTodoItem(index),
+      ),
     );
   }
   
@@ -70,7 +84,8 @@ class TodoListState extends State<TodoList> {
               },
               decoration: InputDecoration(
                 hintText: 'Enter Something to do',
-                contentPadding: const EdgeInsets.all(16.0)
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(16.0)
               ),
             )
           );
@@ -111,7 +126,13 @@ class TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        title: Text('Todo List'),
+        title: Text('Todo List',
+        style: TextStyle(
+          fontSize: 26,
+          fontFamily: 'Nunito Sans',
+          fontWeight: FontWeight.w700,
+        ),
+        ),
     ),
       body: _buildTodoList(),
       floatingActionButton: FloatingActionButton(
