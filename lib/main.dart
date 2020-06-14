@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,12 +48,12 @@ class TodoListState extends State<TodoList> {
         },
     );
   }
-  
+
   Widget _buildTodoItem(String todoText, int index) {
     return Card (
 //      shape: RoundedRectangleBorder(
 //        borderRadius: BorderRadius.circular(5.0),
-//      ),
+//      ), // for rounding the card
       color: Colors.lightBlueAccent,
       child: ListTile(
         title: Text(
@@ -67,17 +67,28 @@ class TodoListState extends State<TodoList> {
       ),
     );
   }
-  
+
   void _pushAddTodoScreen() {
     Navigator.of(context).push (
       MaterialPageRoute(
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Add a new task'),
-            ),   
+              title: Text(
+                'Add a new task',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26,
+                  fontFamily: 'Nunito Sans',
+                ),
+              ),
+            ),
             body: TextField(
               autofocus: true,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
               onSubmitted: (val) {
                 _addTodoItem(val);
                 Navigator.pop(context);
@@ -92,25 +103,46 @@ class TodoListState extends State<TodoList> {
         })
     );
   }
-  
+
   // Remove from list section
   void _removeTodoItem(int index) {
     setState(() => _todoItems.removeAt(index));
   }
-  
+
   void _promptRemoveTodoItem(int index) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog (
-          title: Text ('Mark "${_todoItems[index]} as done?"'),
+          title: Text (
+            'Mark "${_todoItems[index]}" as done?',
+            style: TextStyle(
+              fontFamily: 'Nunito Sans',
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            )
+          ),
           actions: <Widget>[
             FlatButton(
-              child: Text('CANCEL'),
+              child: Text(
+                'CANCEL',
+                  style: TextStyle(
+                    fontFamily: 'Nunito Sans',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )
+              ),
               onPressed: () => Navigator.of(context).pop(),
             ),
             FlatButton(
-              child: Text('MARK AS DONE'),
+              child: Text(
+                  'MARK AS DONE',
+                   style: TextStyle(
+                    fontFamily: 'Nunito Sans',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )
+              ),
               onPressed: () {
                 _removeTodoItem(index);
                 Navigator.of(context).pop();
@@ -143,3 +175,4 @@ class TodoListState extends State<TodoList> {
     );
   }
 }
+
