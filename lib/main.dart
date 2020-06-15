@@ -1,9 +1,18 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
-void main() => runApp(MyApp());
+DateTime now = DateTime.now();
+String formattedDate = DateFormat('dd/MM/yyyy').format(now);
+
+void main() {
+//  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+//  Hive.init(appDocumentDir.path);
+  runApp(MyApp());
+}
 
 
 class MyApp extends StatelessWidget {
@@ -21,6 +30,36 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// The base class for the different types of item in my list
+abstract class ListItem {
+
+  Widget buildTodoList(BuildContext context);
+
+  Widget buildDate(BuildContext context);
+}
+
+//class TodoListItems implements ListItem {
+//  String todolistItem;
+//  DateTime dateTimeOfItem;
+//
+//  TodoListItems(this.todolistItem,this.dateTimeOfItem);
+//
+//  Widget buildTodoList(BuildContext context) {
+//    return Text (
+//      todolistItem,
+//      style: Theme.of(context).textTheme.headline5,
+//    );
+//  }
+//
+//  Widget buildDate(BuildContext context) {
+//    return Text (
+//      dateTimeOfItem,
+//      style: Theme.of(context).textTheme.headline5,
+//    );
+//  }
+//}
+
 
 class TodoList extends StatefulWidget{
   @override
@@ -175,4 +214,5 @@ class TodoListState extends State<TodoList> {
     );
   }
 }
+
 
