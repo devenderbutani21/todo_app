@@ -5,9 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 //  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
 //  Hive.init(appDocumentDir.path);
+//  await Hive.openBox<String>("todoitem");
+//  await Hive.openBox<String>("dateitem");
   runApp(MyApp());
 }
 
@@ -34,12 +37,19 @@ class TodoList extends StatefulWidget{
 
 class TodoListState extends State<TodoList> {
 
+//  Box<String> todoItemBox;
+//  Box<String> todoDateItemBox;
+
   List<String> _todoItems = [];
   List<String> _dateTimeItems = [];
   // Add to list and build-list section
   void _addTodoItem(String task, String date) {
     if(task.length > 0 ) {
       setState(() {
+//        todoItemBox = Hive.box<String>("todoitem");
+//        todoDateItemBox = Hive.box<String>("dateitem");
+//        todoItemBox.putAt(index, task);
+//        todoDateItemBox = Hive.boz
         _todoItems.add(task);
         _dateTimeItems.add(date);
       });
@@ -107,7 +117,7 @@ class TodoListState extends State<TodoList> {
               onSubmitted: (val) {
                 DateTime now = DateTime.now();
                 String formattedDate = DateFormat('dd/MM/yyyy').format(now);
-                _addTodoItem(val, formattedDate);
+                _addTodoItem(val, formattedDate,);
                 Navigator.pop(context);
               },
               decoration: InputDecoration(
