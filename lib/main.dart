@@ -5,15 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-DateTime now = DateTime.now();
-String formattedDate = DateFormat('dd/MM/yyyy').format(now);
-
 void main() {
 //  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
 //  Hive.init(appDocumentDir.path);
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -31,36 +27,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// The base class for the different types of item in my list
-abstract class ListItem {
-
-  Widget buildTodoList(BuildContext context);
-
-  Widget buildDate(BuildContext context);
-}
-
-//class TodoListItems implements ListItem {
-//  String todolistItem;
-//  DateTime dateTimeOfItem;
-//
-//  TodoListItems(this.todolistItem,this.dateTimeOfItem);
-//
-//  Widget buildTodoList(BuildContext context) {
-//    return Text (
-//      todolistItem,
-//      style: Theme.of(context).textTheme.headline5,
-//    );
-//  }
-//
-//  Widget buildDate(BuildContext context) {
-//    return Text (
-//      dateTimeOfItem,
-//      style: Theme.of(context).textTheme.headline5,
-//    );
-//  }
-//}
-
-
 class TodoList extends StatefulWidget{
   @override
   createState() => TodoListState();
@@ -69,11 +35,13 @@ class TodoList extends StatefulWidget{
 class TodoListState extends State<TodoList> {
 
   List<String> _todoItems = [];
+  List<String> _dateTimeItems = [];
   // Add to list and build-list section
-  void _addTodoItem(String task) {
+  void _addTodoItem(String task, String date) {
     if(task.length > 0 ) {
       setState(() {
         _todoItems.add(task);
+        _dateTimeItems.add(date);
       });
     }
   }
@@ -82,13 +50,13 @@ class TodoListState extends State<TodoList> {
     return ListView.builder(
         itemBuilder: (context, index) {
           if(index < _todoItems.length) {
-            return _buildTodoItem( _todoItems[index], index);
+            return _buildTodoItem( _todoItems[index], index, _dateTimeItems[index]);
           }
         },
     );
   }
 
-  Widget _buildTodoItem(String todoText, int index) {
+  Widget _buildTodoItem(String todoText, int index, String dateText) {
     return Card (
 //      shape: RoundedRectangleBorder(
 //        borderRadius: BorderRadius.circular(5.0),
@@ -96,10 +64,18 @@ class TodoListState extends State<TodoList> {
       color: Colors.lightBlueAccent,
       child: ListTile(
         title: Text(
-          todoText,
+            dateText,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+        ),
+        subtitle: Text(
+            todoText,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
+            color: Colors.black,
           ),
         ),
         onTap: () => _promptRemoveTodoItem(index),
@@ -129,7 +105,9 @@ class TodoListState extends State<TodoList> {
                 fontSize: 24,
               ),
               onSubmitted: (val) {
-                _addTodoItem(val);
+                DateTime now = DateTime.now();
+                String formattedDate = DateFormat('dd/MM/yyyy').format(now);
+                _addTodoItem(val, formattedDate);
                 Navigator.pop(context);
               },
               decoration: InputDecoration(
@@ -145,7 +123,10 @@ class TodoListState extends State<TodoList> {
 
   // Remove from list section
   void _removeTodoItem(int index) {
-    setState(() => _todoItems.removeAt(index));
+    setState(() {
+      _todoItems.removeAt(index);
+      _dateTimeItems.removeAt(index);
+    });
   }
 
   void _promptRemoveTodoItem(int index) {
