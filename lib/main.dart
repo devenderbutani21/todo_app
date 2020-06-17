@@ -7,10 +7,10 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-//  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
-//  Hive.init(appDocumentDir.path);
-//  await Hive.openBox<String>("todoitem");
-//  await Hive.openBox<String>("dateitem");
+  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
+  await Hive.openBox<String>("todoitem");
+  await Hive.openBox<String>("dateitem");
   runApp(MyApp());
 }
 
@@ -37,19 +37,19 @@ class TodoList extends StatefulWidget{
 
 class TodoListState extends State<TodoList> {
 
-//  Box<String> todoItemBox;
-//  Box<String> todoDateItemBox;
+  Box<String> todoItemBox;
+  Box<String> todoDateItemBox;
 
   List<String> _todoItems = [];
   List<String> _dateTimeItems = [];
   // Add to list and build-list section
   void _addTodoItem(String task, String date) {
+    todoItemBox = Hive.box<String>("todoitem");
+    todoDateItemBox = Hive.box<String>("dateitem");
     if(task.length > 0 ) {
       setState(() {
-//        todoItemBox = Hive.box<String>("todoitem");
-//        todoDateItemBox = Hive.box<String>("dateitem");
-//        todoItemBox.putAt(index, task);
-//        todoDateItemBox = Hive.boz
+        todoItemBox.add(task);
+        todoDateItemBox.add(date);
         _todoItems.add(task);
         _dateTimeItems.add(date);
       });
@@ -134,6 +134,8 @@ class TodoListState extends State<TodoList> {
   // Remove from list section
   void _removeTodoItem(int index) {
     setState(() {
+      todoItemBox.delete(index);
+      todoDateItemBox.delete(index);
       _todoItems.removeAt(index);
       _dateTimeItems.removeAt(index);
     });
@@ -145,7 +147,7 @@ class TodoListState extends State<TodoList> {
       builder: (BuildContext context) {
         return AlertDialog (
           title: Text (
-            'Mark "${_todoItems[index]}" as done?',
+            'Mark "${todoItemBox.getAt(index)}" as done?',
             style: TextStyle(
               fontFamily: 'Nunito Sans',
               fontSize: 24,
