@@ -16,6 +16,8 @@ class RoundCheckboxButtonState extends State<RoundCheckboxButton>{
         });
       },
       child: Container(
+        height: 30,
+        width: 30,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: _value?
@@ -23,16 +25,16 @@ class RoundCheckboxButtonState extends State<RoundCheckboxButton>{
               :Colors.white,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(3.0),
           child: _value
               ? Icon(
             Icons.check,
-            size: 30.0,
+            size: 15.0,
             color: Colors.white,
           )
               : Icon(
             Icons.check_box_outline_blank,
-            size: 30.0,
+            size: 15.0,
             color: Colors.white,
           ),
         ),

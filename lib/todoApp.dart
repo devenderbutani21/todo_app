@@ -12,8 +12,30 @@ class TodoAppState extends State<TodoApp>{
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: RoundCheckboxButton(),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Center(
+            child: Text('All Tasks',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+        ),
+        body: ListView(
+          children: <Widget>[
+            Card(
+              child: ListTile(
+                title: Text('One-line with trailing widget',
+                style: _value ?
+                      TextStyle()
+                    : TextStyle( decoration: TextDecoration.lineThrough,),
+              ),
+                trailing: RoundCheckboxButton(),
+              ),
+            ),
+          ],
         ),
         floatingActionButton: Container(
           height: 75,
