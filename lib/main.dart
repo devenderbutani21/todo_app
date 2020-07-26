@@ -78,7 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           actions: <Widget>[
             PopupMenuButton<String>(
-              color: Colors.black,
+              icon: Icon(
+                Icons.more_vert,
+                color: Colors.black,
+              ),
+              color: Colors.white70,
               onSelected: (value) {
                 if (value.compareTo("All") == 0) {
                   setState(() {
@@ -108,10 +112,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 15,
+              ),
               ValueListenableBuilder(
                 valueListenable: todoBox.listenable(),
                 builder: (context, Box<TodoModel> todos, _) {
@@ -130,94 +136,120 @@ class _MyHomePageState extends State<MyHomePage> {
                         .where((key) => !todos.get(key).isCompleted)
                         .toList();
                   }
-
                   return ListView.separated(
                     itemBuilder: (_, index) {
                       final int key = keys[index];
                       final TodoModel todo = todos.get(key);
 
-                      return ListTile(
-                        title: Text(
-                          todo.title,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontFamily: 'Nunito Sans',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        subtitle: Text(
-                          todo.detail,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: 'Nunito Sans',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-//                        trailing: Icon(
-//                          Icons.check,
-//                          color: todo.isCompleted ? Colors.green : Colors.red,
+                      return Container(
+//                        decoration: BoxDecoration(
+//
 //                        ),
-                      trailing: RoundCheckboxButton(todo.isCompleted),
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            child: Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(16),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    FlatButton(
-                                      child: Text(
-                                        "Delete Item",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito Sans',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40.0),
+                          border: Border.all(color: Colors.grey.shade500),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            todo.title,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'Nunito Sans',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          subtitle: Text(
+                            todo.detail,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Nunito Sans',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          trailing: RoundCheckboxButton(todo.isCompleted),
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              child: Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Container(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              "What do you want to do?",
+                                              style: styleText,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.close,
+                                              color: Colors.black,
+                                            ),
+                                            iconSize: 15,
+                                            alignment: Alignment.topRight,
+                                          ),
+                                        ],
                                       ),
-                                      onPressed: () {
-//                                      TodoModel mTodo = TodoModel(
-//                                        title: todo.title,
-//                                        detail: todo.detail,
-//                                        isCompleted: true,
-//                                      );
-                                        setState(() {
-                                          todoBox.delete(key);
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: Text(
-                                        "Mark As Completed",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito Sans',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          FlatButton(
+                                            child: Text(
+                                              "Delete Item",
+                                              style: TextStyle(
+                                                fontFamily: 'Nunito Sans',
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                todoBox.delete(key);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text(
+                                              "Mark As Completed",
+                                              style: TextStyle(
+                                                fontFamily: 'Nunito Sans',
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              TodoModel mTodo = TodoModel(
+                                                title: todo.title,
+                                                detail: todo.detail,
+                                                isCompleted: true,
+                                              );
+                                              setState(() {
+                                                todoBox.put(key, mTodo);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                      onPressed: () {
-                                        TodoModel mTodo = TodoModel(
-                                          title: todo.title,
-                                          detail: todo.detail,
-                                          isCompleted: true,
-                                        );
-                                        setState(() {
-                                          todoBox.put(key, mTodo);
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       );
                     },
                     separatorBuilder: (_, index) => Divider(),
@@ -231,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          backgroundColor: Color(0xff5ca8e0),
+          backgroundColor: Color(0xff37d7b2),
           onPressed: () {
             showDialog(
               context: context,
@@ -284,9 +316,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           setState(() {
                             todoBox.add(todo);
                             Navigator.of(context).pop();
-                            titleController = null;
-                            detailController = null;
                           });
+                          titleController = null;
+                          detailController = null;
                         },
                       ),
                     ],

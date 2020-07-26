@@ -22,9 +22,9 @@ class RoundCheckboxButton extends StatelessWidget {
                 color: Colors.white,
               )
             : Icon(
-                Icons.check_box_outline_blank,
-                size: 15.0,
-                color: Colors.white,
+                Icons.radio_button_unchecked,
+                size: 30.0,
+                color: Colors.black,
               ),
       ),
     );
