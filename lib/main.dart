@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -61,6 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -181,6 +185,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     children: [
                                       Row(
                                         children: [
+                                          SizedBox(
+                                            width: 45,
+                                          ),
                                           Center(
                                             child: Text(
                                               "What do you want to do?",
@@ -189,15 +196,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                           ),
                                           SizedBox(
-                                            width: 20,
+                                            width: 5,
                                           ),
                                           IconButton(
                                             icon: Icon(
                                               Icons.close,
                                               color: Colors.black,
+                                              size: 20,
                                             ),
-                                            iconSize: 15,
+//                                            iconSize: 1,
                                             alignment: Alignment.topRight,
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
                                           ),
                                         ],
                                       ),
@@ -332,24 +343,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// For UI testing
-//import 'package:flutter/material.dart';
-//import 'package:todoapp/todoApp.dart';
-//import 'package:flutter/services.dart' ;
-//
-//
-//void main() => runApp(MyApp());
-//
-//class MyApp extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    SystemChrome.setPreferredOrientations([
-//      DeviceOrientation.portraitUp,
-//    ]);
-//    return MaterialApp(
-//      debugShowCheckedModeBanner: false,
-//      home: TodoApp(),
-//    );
-//  }
-//}
