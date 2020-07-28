@@ -54,14 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
     todoBox = Hive.box<TodoModel>(todoBoxName);
   }
 
-  TextStyle styleText = TextStyle(
-    fontFamily: 'Nunito Sans',
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final curScaleFactor = mediaQuery.textScaleFactor * 0.8;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -74,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
               "All Tasks",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 26,
+                fontSize: 26 * curScaleFactor,
                 fontFamily: 'Nunito Sans',
                 fontWeight: FontWeight.w700,
               ),
@@ -108,7 +104,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     value: option,
                     child: Text(
                       option,
-                      style: styleText,
+                      style: TextStyle(
+                        fontFamily: 'Nunito Sans',
+                        fontSize: 18 * curScaleFactor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   );
                 }).toList();
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 15,
+                height: mediaQuery.size.height/30,
               ),
               ValueListenableBuilder(
                 valueListenable: todoBox.listenable(),
@@ -146,18 +146,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       final TodoModel todo = todos.get(key);
 
                       return Container(
-//                        decoration: BoxDecoration(
-//
-//                        ),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40.0),
+                          borderRadius: BorderRadius.circular(mediaQuery.size.width/8),
                           border: Border.all(color: Colors.grey.shade500),
                         ),
                         child: ListTile(
                           title: Text(
                             todo.title,
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 24 * curScaleFactor,
                               fontFamily: 'Nunito Sans',
                               fontWeight: FontWeight.w700,
                             ),
@@ -165,51 +162,50 @@ class _MyHomePageState extends State<MyHomePage> {
                           subtitle: Text(
                             todo.detail,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 20 * curScaleFactor,
                               fontFamily: 'Nunito Sans',
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          trailing: RoundCheckboxButton(todo.isCompleted),
+                          trailing: RoundCheckboxButton(todo.isCompleted,mediaQuery),
                           onTap: () {
                             showDialog(
                               context: context,
                               child: Dialog(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(mediaQuery.size.width/16),
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.all(16),
+                                  padding: EdgeInsets.all(mediaQuery.size.width/20),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Row(
                                         children: [
-                                          SizedBox(
-                                            width: 45,
-                                          ),
-                                          Center(
+                                          Container(
+
                                             child: Text(
                                               "What do you want to do?",
-                                              style: styleText,
+                                              style: TextStyle(
+                                                fontFamily: 'Nunito Sans',
+                                                fontSize: 18 * curScaleFactor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                               textAlign: TextAlign.center,
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.close,
-                                              color: Colors.black,
-                                              size: 20,
-                                            ),
-//                                            iconSize: 1,
-                                            alignment: Alignment.topRight,
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
+//                                          IconButton(
+//                                            icon: Icon(
+//                                              Icons.close,
+//                                              color: Colors.black,
+//                                              size: mediaQuery.size.width/25,
+//                                            ),
+////                                            iconSize: 1,
+//                                            alignment: Alignment.topRight,
+//                                            onPressed: () {
+//                                              Navigator.of(context).pop();
+//                                            },
+//                                          ),
                                         ],
                                       ),
                                       Row(
@@ -220,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               "Delete Item",
                                               style: TextStyle(
                                                 fontFamily: 'Nunito Sans',
-                                                fontSize: 14,
+                                                fontSize: 14 * curScaleFactor,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -236,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               "Mark As Completed",
                                               style: TextStyle(
                                                 fontFamily: 'Nunito Sans',
-                                                fontSize: 14,
+                                                fontSize: 14 * curScaleFactor,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -280,10 +276,10 @@ class _MyHomePageState extends State<MyHomePage> {
               context: context,
               child: Dialog(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(mediaQuery.size.width/16),
                 ),
                 child: Container(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(mediaQuery.size.width/20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -291,29 +287,49 @@ class _MyHomePageState extends State<MyHomePage> {
                         autofocus: true,
                         decoration: InputDecoration(
                           hintText: "Title",
-                          labelStyle: styleText,
+                          labelStyle: TextStyle(
+                            fontFamily: 'Nunito Sans',
+                            fontSize: 18 * curScaleFactor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         controller: titleController,
-                        style: styleText,
+                        style: TextStyle(
+                          fontFamily: 'Nunito Sans',
+                          fontSize: 18 * curScaleFactor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
-                        height: 8,
+                        height: mediaQuery.size.width/32,
                       ),
                       TextField(
                         decoration: InputDecoration(
                           hintText: "Detail",
-                          labelStyle: styleText,
+                          labelStyle: TextStyle(
+                            fontFamily: 'Nunito Sans',
+                            fontSize: 18 * curScaleFactor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         controller: detailController,
-                        style: styleText,
+                        style: TextStyle(
+                          fontFamily: 'Nunito Sans',
+                          fontSize: 18 * curScaleFactor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
-                        height: 8,
+                        height: mediaQuery.size.width/32,
                       ),
                       FlatButton(
                         child: Text(
                           "Add",
-                          style: styleText,
+                          style: TextStyle(
+                            fontFamily: 'Nunito Sans',
+                            fontSize: 18 * curScaleFactor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         onPressed: () {
                           String title = titleController.text;
