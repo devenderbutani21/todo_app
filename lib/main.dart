@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final curScaleFactor = mediaQuery.textScaleFactor * 0.8;
+    final curScaleFactor = mediaQuery.textScaleFactor;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: mediaQuery.size.height/30,
+                height: mediaQuery.size.height / 30,
               ),
               ValueListenableBuilder(
                 valueListenable: todoBox.listenable(),
@@ -147,7 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       return Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(mediaQuery.size.width/8),
+                          borderRadius:
+                              BorderRadius.circular(mediaQuery.size.width / 8),
                           border: Border.all(color: Colors.grey.shade500),
                         ),
                         child: ListTile(
@@ -167,57 +168,80 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          trailing: RoundCheckboxButton(todo.isCompleted,mediaQuery),
+                          trailing:
+                              RoundCheckboxButton(todo.isCompleted, mediaQuery),
                           onTap: () {
                             showDialog(
                               context: context,
                               child: Dialog(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(mediaQuery.size.width/16),
+                                  borderRadius: BorderRadius.circular(
+                                      mediaQuery.size.width / 16),
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.all(mediaQuery.size.width/20),
+                                  padding: EdgeInsets.all(
+                                      mediaQuery.size.width / 20),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Row(
                                         children: [
                                           Container(
-
-                                            child: Text(
-                                              "What do you want to do?",
-                                              style: TextStyle(
-                                                fontFamily: 'Nunito Sans',
-                                                fontSize: 18 * curScaleFactor,
-                                                fontWeight: FontWeight.bold,
+                                            child: Expanded(
+                                              flex: 9,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                child: Text(
+                                                  "What do you want to do?",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize: 18 * curScaleFactor,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
                                               ),
-                                              textAlign: TextAlign.center,
                                             ),
                                           ),
-//                                          IconButton(
-//                                            icon: Icon(
-//                                              Icons.close,
-//                                              color: Colors.black,
-//                                              size: mediaQuery.size.width/25,
-//                                            ),
-////                                            iconSize: 1,
-//                                            alignment: Alignment.topRight,
-//                                            onPressed: () {
-//                                              Navigator.of(context).pop();
-//                                            },
-//                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: IconButton(
+                                              icon: Icon(
+                                                Icons.close,
+                                                color: Colors.black,
+                                                size:
+                                                    mediaQuery.size.width / 25,
+                                              ),
+//                                            iconSize: 1,
+                                              alignment: Alignment.topRight,
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ),
                                         ],
                                       ),
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           FlatButton(
-                                            child: Text(
-                                              "Delete Item",
-                                              style: TextStyle(
-                                                fontFamily: 'Nunito Sans',
-                                                fontSize: 14 * curScaleFactor,
-                                                fontWeight: FontWeight.bold,
+                                            child: Expanded(
+                                              child: FittedBox(
+                                                fit:BoxFit.contain,
+                                                child: Text(
+                                                  "Delete Item",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize:
+                                                        mediaQuery.size.width <
+                                                                350
+                                                            ? 14 *
+                                                                curScaleFactor *
+                                                                0.7
+                                                            : 14 * curScaleFactor,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             onPressed: () {
@@ -228,12 +252,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                             },
                                           ),
                                           FlatButton(
-                                            child: Text(
-                                              "Mark As Completed",
-                                              style: TextStyle(
-                                                fontFamily: 'Nunito Sans',
-                                                fontSize: 14 * curScaleFactor,
-                                                fontWeight: FontWeight.bold,
+                                            child: Expanded(
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                child: Text(
+                                                  "Mark As Completed",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize:
+                                                        mediaQuery.size.width <
+                                                                350
+                                                            ? 14 *
+                                                                curScaleFactor *
+                                                                0.7
+                                                            : 14 * curScaleFactor,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             onPressed: () {
@@ -276,10 +311,11 @@ class _MyHomePageState extends State<MyHomePage> {
               context: context,
               child: Dialog(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(mediaQuery.size.width/16),
+                  borderRadius:
+                      BorderRadius.circular(mediaQuery.size.width / 16),
                 ),
                 child: Container(
-                  padding: EdgeInsets.all(mediaQuery.size.width/20),
+                  padding: EdgeInsets.all(mediaQuery.size.width / 20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -301,7 +337,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       SizedBox(
-                        height: mediaQuery.size.width/32,
+                        height: mediaQuery.size.width / 32,
                       ),
                       TextField(
                         decoration: InputDecoration(
@@ -320,7 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       SizedBox(
-                        height: mediaQuery.size.width/32,
+                        height: mediaQuery.size.width / 32,
                       ),
                       FlatButton(
                         child: Text(
