@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Todo App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xff37d7b2),
       ),
       home: MyHomePage(),
     );
@@ -49,7 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     todoBox = Hive.box<TodoModel>(todoBoxName);
   }
@@ -63,64 +62,72 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white70,
-          title: Center(
-            child: Text(
-              "All Tasks",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 26 * curScaleFactor,
-                fontFamily: 'Nunito Sans',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            PopupMenuButton<String>(
-              icon: Icon(
-                Icons.more_vert,
-                color: Colors.black,
-              ),
-              color: Colors.white70,
-              onSelected: (value) {
-                if (value.compareTo("All") == 0) {
-                  setState(() {
-                    filter = TodoFilter.ALL;
-                  });
-                } else if (value.compareTo("Completed") == 0) {
-                  setState(() {
-                    filter = TodoFilter.COMPLETED;
-                  });
-                } else {
-                  setState(() {
-                    filter = TodoFilter.INCOMPLETE;
-                  });
-                }
-              },
-              itemBuilder: (BuildContext context) {
-                return ["All", "Completed", "Incomplete"].map((option) {
-                  return PopupMenuItem(
-                    value: option,
-                    child: Text(
-                      option,
-                      style: TextStyle(
-                        fontFamily: 'Nunito Sans',
-                        fontSize: 18 * curScaleFactor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                }).toList();
-              },
-            ),
-          ],
-        ),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: mediaQuery.size.height / 30,
+                height: mediaQuery.size.height / 100,
+              ),
+              Row(
+                children: <Widget>[
+                  Flexible(
+                    flex: 9,
+                    child: Center(
+                      child: Text(
+                        "All Tasks",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 26 * curScaleFactor,
+                          fontFamily: 'Nunito Sans',
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: PopupMenuButton<String>(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: Colors.black,
+                      ),
+                      color: Colors.white70,
+                      onSelected: (value) {
+                        if (value.compareTo("All") == 0) {
+                          setState(() {
+                            filter = TodoFilter.ALL;
+                          });
+                        } else if (value.compareTo("Completed") == 0) {
+                          setState(() {
+                            filter = TodoFilter.COMPLETED;
+                          });
+                        } else {
+                          setState(() {
+                            filter = TodoFilter.INCOMPLETE;
+                          });
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return ["All", "Completed", "Incomplete"].map((option) {
+                          return PopupMenuItem(
+                            value: option,
+                            child: Text(
+                              option,
+                              style: TextStyle(
+                                fontFamily: 'Nunito Sans',
+                                fontSize: 18 * curScaleFactor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }).toList();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: mediaQuery.size.height / 60,
               ),
               ValueListenableBuilder(
                 valueListenable: todoBox.listenable(),
@@ -159,8 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             border: Border.all(color: Colors.grey.shade500),
                           ),
                           child: ListTile(
-//                            leading: RoundCheckboxButton(
-//                              todo.isCompleted, mediaQuery,),
                             title: Text(
                               todo.title,
                               style: TextStyle(
