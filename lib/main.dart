@@ -25,7 +25,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Todo App',
       theme: ThemeData(
-        primaryColor: Color(0xff37d7b2),
+        // primaryColor: Color(0xff37d7b2),
+        primaryColor: Colors.white,
+        canvasColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          color: Colors.white,
+        ),
       ),
       home: MyHomePage(),
     );
@@ -60,352 +66,336 @@ class _MyHomePageState extends State<MyHomePage> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: mediaQuery.size.height / 100,
-              ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 9,
-                    child: Center(
-                      child: Text(
-                        "All Tasks",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 26 * curScaleFactor,
-                          fontFamily: 'Nunito Sans',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: PopupMenuButton<String>(
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: Colors.black,
-                      ),
-                      color: Colors.white70,
-                      onSelected: (value) {
-                        if (value.compareTo("All") == 0) {
-                          setState(() {
-                            filter = TodoFilter.ALL;
-                          });
-                        } else if (value.compareTo("Completed") == 0) {
-                          setState(() {
-                            filter = TodoFilter.COMPLETED;
-                          });
-                        } else {
-                          setState(() {
-                            filter = TodoFilter.INCOMPLETE;
-                          });
-                        }
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return ["All", "Completed", "Incomplete"].map((option) {
-                          return PopupMenuItem(
-                            value: option,
-                            child: Text(
-                              option,
-                              style: TextStyle(
-                                fontFamily: 'Nunito Sans',
-                                fontSize: 18 * curScaleFactor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: mediaQuery.size.height / 60,
-              ),
-              ValueListenableBuilder(
-                valueListenable: todoBox.listenable(),
-                builder: (context, Box<TodoModel> todos, _) {
-                  List<int> keys;
-
-                  if (filter == TodoFilter.ALL) {
-                    keys = todos.keys.cast<int>().toList();
-                  } else if (filter == TodoFilter.COMPLETED) {
-                    keys = todos.keys
-                        .cast<int>()
-                        .where((key) => todos.get(key).isCompleted)
-                        .toList();
-                  } else {
-                    keys = todos.keys
-                        .cast<int>()
-                        .where((key) => !todos.get(key).isCompleted)
-                        .toList();
-                  }
-                  return Container(
-                    height: mediaQuery.size.height,
-                    padding: EdgeInsets.only(
-                      bottom: mediaQuery.size.height / 100,
-                    ),
-                    child: ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (_, index) {
-                        final int key = keys[index];
-                        final TodoModel todo = todos.get(key);
-
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                mediaQuery.size.width / 8),
-                            border: Border.all(color: Colors.grey.shade500),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                              todo.title,
-                              style: TextStyle(
-                                fontSize: 24 * curScaleFactor,
-                                fontFamily: 'Nunito Sans',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            subtitle: Text(
-                              todo.detail,
-                              style: TextStyle(
-                                fontSize: 20 * curScaleFactor,
-                                fontFamily: 'Nunito Sans',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            trailing: RoundCheckboxButton(
-                              todo.isCompleted,
-                              mediaQuery,
-                            ),
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                child: Dialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        mediaQuery.size.width / 16),
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.all(
-                                        mediaQuery.size.width / 20),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              child: Expanded(
-                                                flex: 17,
-                                                child: FittedBox(
-                                                  fit: BoxFit.contain,
-                                                  child: Text(
-                                                    "What do you want to do?",
-                                                    style: TextStyle(
-                                                      fontFamily: 'Nunito Sans',
-                                                      fontSize:
-                                                          18 * curScaleFactor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 3,
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.close,
-                                                  color: Colors.black,
-                                                  size: mediaQuery.size.width /
-                                                      25,
-                                                ),
-//                                            iconSize: 1,
-                                                alignment: Alignment.topRight,
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            FlatButton(
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                child: Text(
-                                                  "Delete Item",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Nunito Sans',
-                                                    fontSize: mediaQuery
-                                                                .size.width <
-                                                            350
-                                                        ? 14 *
-                                                            curScaleFactor *
-                                                            0.7
-                                                        : 14 * curScaleFactor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  todoBox.delete(key);
-                                                });
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                child: Text(
-                                                  "Mark Complete",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Nunito Sans',
-                                                    fontSize: mediaQuery
-                                                                .size.width <
-                                                            350
-                                                        ? 14 *
-                                                            curScaleFactor *
-                                                            0.7
-                                                        : 14 * curScaleFactor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                TodoModel mTodo = TodoModel(
-                                                  title: todo.title,
-                                                  detail: todo.detail,
-                                                  isCompleted: true,
-                                                );
-                                                setState(() {
-                                                  todoBox.put(key, mTodo);
-                                                });
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      separatorBuilder: (_, index) => Divider(),
-                      itemCount: keys.length,
-                      shrinkWrap: true,
-                    ),
-                  );
-                },
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            "All Tasks",
+            style: TextStyle(
+              fontSize: 26 * curScaleFactor,
+              fontFamily: 'Nunito Sans',
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          backgroundColor: Color(0xff37d7b2),
-          onPressed: () {
-            showDialog(
-              context: context,
-              child: Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(mediaQuery.size.width / 16),
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(mediaQuery.size.width / 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      TextField(
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          hintText: "Title",
-                          labelStyle: TextStyle(
-                            fontFamily: 'Nunito Sans',
-                            fontSize: 18 * curScaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        controller: titleController,
-                        style: TextStyle(
-                          fontFamily: 'Nunito Sans',
-                          fontSize: 18 * curScaleFactor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: mediaQuery.size.width / 32,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: "Detail",
-                          labelStyle: TextStyle(
-                            fontFamily: 'Nunito Sans',
-                            fontSize: 18 * curScaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        controller: detailController,
-                        style: TextStyle(
-                          fontFamily: 'Nunito Sans',
-                          fontSize: 18 * curScaleFactor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: mediaQuery.size.width / 32,
-                      ),
-                      FlatButton(
-                        child: Text(
-                          "Add",
-                          style: TextStyle(
-                            fontFamily: 'Nunito Sans',
-                            fontSize: 18 * curScaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () {
-                          String title = titleController.text;
-                          String detail = detailController.text;
-
-                          TodoModel todo = TodoModel(
-                            title: title,
-                            detail: detail,
-                            isCompleted: false,
-                          );
-                          setState(() {
-                            todoBox.add(todo);
-                            Navigator.of(context).pop();
-                          });
-                          titleController.clear();
-                          detailController.clear();
-                        },
-                      ),
-                    ],
+        actions: [
+          PopupMenuButton<String>(
+            icon: Icon(
+              Icons.more_vert,
+            ),
+            color: Colors.white70,
+            onSelected: (value) {
+              if (value.compareTo("All") == 0) {
+                setState(() {
+                  filter = TodoFilter.ALL;
+                });
+              } else if (value.compareTo("Completed") == 0) {
+                setState(() {
+                  filter = TodoFilter.COMPLETED;
+                });
+              } else {
+                setState(() {
+                  filter = TodoFilter.INCOMPLETE;
+                });
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return ["All", "Completed", "Incomplete"].map((option) {
+                return PopupMenuItem(
+                  value: option,
+                  child: Text(
+                    option,
+                    style: TextStyle(
+                      fontFamily: 'Nunito Sans',
+                      fontSize: 18 * curScaleFactor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: mediaQuery.size.height / 60,
+            ),
+            ValueListenableBuilder(
+              valueListenable: todoBox.listenable(),
+              builder: (context, Box<TodoModel> todos, _) {
+                List<int> keys;
+                if (filter == TodoFilter.ALL) {
+                  keys = todos.keys.cast<int>().toList();
+                } else if (filter == TodoFilter.COMPLETED) {
+                  keys = todos.keys
+                      .cast<int>()
+                      .where((key) => todos.get(key).isCompleted)
+                      .toList();
+                } else {
+                  keys = todos.keys
+                      .cast<int>()
+                      .where((key) => !todos.get(key).isCompleted)
+                      .toList();
+                }
+                return Container(
+                  height: mediaQuery.size.height,
+                  padding: EdgeInsets.only(
+                    bottom: mediaQuery.size.height / 100,
+                  ),
+                  child: ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (_, index) {
+                      final int key = keys[index];
+                      final TodoModel todo = todos.get(key);
+
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(mediaQuery.size.width / 8),
+                          border: Border.all(color: Colors.grey.shade500),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            todo.title,
+                            style: TextStyle(
+                              fontSize: 22 * curScaleFactor,
+                              fontFamily: 'Nunito Sans',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          subtitle: Text(
+                            todo.detail,
+                            style: TextStyle(
+                              fontSize: 18 * curScaleFactor,
+                              fontFamily: 'Nunito Sans',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          trailing: RoundCheckboxButton(
+                            todo.isCompleted,
+                            mediaQuery,
+                          ),
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              child: Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      mediaQuery.size.width / 16),
+                                ),
+                                child: Container(
+                                  padding: EdgeInsets.all(
+                                      mediaQuery.size.width / 20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            child: Expanded(
+                                              flex: 17,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                child: Text(
+                                                  "What do you want to do?",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize:
+                                                        18 * curScaleFactor,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: IconButton(
+                                              icon: Icon(
+                                                Icons.close,
+                                                color: Colors.black,
+                                                size:
+                                                    mediaQuery.size.width / 25,
+                                              ),
+//                                            iconSize: 1,
+                                              alignment: Alignment.topRight,
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          FlatButton(
+                                            child: FittedBox(
+                                              fit: BoxFit.contain,
+                                              child: Text(
+                                                "Delete Item",
+                                                style: TextStyle(
+                                                  fontFamily: 'Nunito Sans',
+                                                  fontSize:
+                                                      mediaQuery.size.width <
+                                                              350
+                                                          ? 14 *
+                                                              curScaleFactor *
+                                                              0.7
+                                                          : 14 * curScaleFactor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                todoBox.delete(key);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: FittedBox(
+                                              fit: BoxFit.contain,
+                                              child: Text(
+                                                "Mark Complete",
+                                                style: TextStyle(
+                                                  fontFamily: 'Nunito Sans',
+                                                  fontSize:
+                                                      mediaQuery.size.width <
+                                                              350
+                                                          ? 14 *
+                                                              curScaleFactor *
+                                                              0.7
+                                                          : 14 * curScaleFactor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              TodoModel mTodo = TodoModel(
+                                                title: todo.title,
+                                                detail: todo.detail,
+                                                isCompleted: true,
+                                              );
+                                              setState(() {
+                                                todoBox.put(key, mTodo);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    separatorBuilder: (_, index) => Divider(),
+                    itemCount: keys.length,
+                    shrinkWrap: true,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Color(0xff37d7b2),
+        onPressed: () {
+          showDialog(
+            context: context,
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(mediaQuery.size.width / 16),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(mediaQuery.size.width / 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: "Title",
+                        labelStyle: TextStyle(
+                          fontFamily: 'Nunito Sans',
+                          fontSize: 18 * curScaleFactor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      controller: titleController,
+                      style: TextStyle(
+                        fontFamily: 'Nunito Sans',
+                        fontSize: 18 * curScaleFactor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: mediaQuery.size.width / 32,
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: "Detail",
+                        labelStyle: TextStyle(
+                          fontFamily: 'Nunito Sans',
+                          fontSize: 18 * curScaleFactor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      controller: detailController,
+                      style: TextStyle(
+                        fontFamily: 'Nunito Sans',
+                        fontSize: 18 * curScaleFactor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: mediaQuery.size.width / 32,
+                    ),
+                    FlatButton(
+                      child: Text(
+                        "Add",
+                        style: TextStyle(
+                          fontFamily: 'Nunito Sans',
+                          fontSize: 18 * curScaleFactor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        String title = titleController.text;
+                        String detail = detailController.text;
+
+                        TodoModel todo = TodoModel(
+                          title: title,
+                          detail: detail,
+                          isCompleted: false,
+                        );
+                        setState(() {
+                          todoBox.add(todo);
+                          Navigator.of(context).pop();
+                        });
+                        titleController.clear();
+                        detailController.clear();
+                      },
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
