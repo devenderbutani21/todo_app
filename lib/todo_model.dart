@@ -10,10 +10,13 @@ class TodoModel {
   final String detail;
   @HiveField(2)
   final bool isCompleted;
+  @HiveField(3)
+  final DateTime dateTime;
 
   TodoModel({
     this.title,
     this.detail,
     this.isCompleted,
+    this.dateTime,
   });
 }
