@@ -53,6 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TodoFilter filter = TodoFilter.ALL;
 
+  DateTime selectedDate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -66,6 +68,26 @@ class _MyHomePageState extends State<MyHomePage> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+    // showDatePicker(
+    //   context: context,
+    //   initialDate: DateTime.now(),
+    //   firstDate: DateTime(2000),
+    //   lastDate: DateTime(2025),
+    // );
+    //
+    // _selectDate(BuildContext context) async {
+    //   final DateTime picked = await showDatePicker(
+    //     context: context,
+    //     initialDate: selectedDate, // Refer step 1
+    //     firstDate: DateTime(2000),
+    //     lastDate: DateTime(2025),
+    //   );
+    //   if (picked != null && picked != selectedDate)
+    //     setState(() {
+    //       selectedDate = picked;
+    //     });
+    // }
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -363,6 +385,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     SizedBox(
                       height: mediaQuery.size.width / 32,
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        // _selectDate(context);
+                      },
+                      child: Text('Add Date'),
                     ),
                     FlatButton(
                       child: Text(
