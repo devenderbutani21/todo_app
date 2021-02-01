@@ -4,7 +4,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'widget/roundCheckboxButton.dart';
+import 'widgets/roundCheckboxButton.dart';
+import './widgets/text_widget.dart';
 import 'todo_model.dart';
 
 const String todoBoxName = "todo";
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Todo App',
       theme: ThemeData(
-        // primaryColor: Color(0xff37d7b2),
         primaryColor: Colors.white,
         canvasColor: Colors.white,
         appBarTheme: AppBarTheme(
@@ -125,13 +125,11 @@ class _MyHomePageState extends State<MyHomePage> {
               return ["All", "Completed", "Incomplete"].map((option) {
                 return PopupMenuItem(
                   value: option,
-                  child: Text(
+                  child: TextWidget(
                     option,
-                    style: TextStyle(
-                      fontFamily: 'Nunito Sans',
-                      fontSize: 18 * curScaleFactor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    FontWeight.bold,
+                    18,
+                    TextAlign.center,
                   ),
                 );
               }).toList();
@@ -181,21 +179,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           border: Border.all(color: Colors.grey.shade500),
                         ),
                         child: ListTile(
-                          title: Text(
+                          title: TextWidget(
                             todo.title,
-                            style: TextStyle(
-                              fontSize: 22 * curScaleFactor,
-                              fontFamily: 'Nunito Sans',
-                              fontWeight: FontWeight.w700,
-                            ),
+                            FontWeight.w700,
+                            22,
+                            TextAlign.left,
                           ),
-                          subtitle: Text(
+                          subtitle: TextWidget(
                             todo.detail,
-                            style: TextStyle(
-                              fontSize: 18 * curScaleFactor,
-                              fontFamily: 'Nunito Sans',
-                              fontWeight: FontWeight.w700,
-                            ),
+                            FontWeight.w700,
+                            18,
+                            TextAlign.left,
                           ),
                           trailing: RoundCheckboxButton(
                             todo.isCompleted,
@@ -222,15 +216,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                               flex: 17,
                                               child: FittedBox(
                                                 fit: BoxFit.contain,
-                                                child: Text(
+                                                child: TextWidget(
                                                   "What do you want to do?",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Nunito Sans',
-                                                    fontSize:
-                                                        18 * curScaleFactor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  textAlign: TextAlign.center,
+                                                  FontWeight.bold,
+                                                  18,
+                                                  TextAlign.center,
                                                 ),
                                               ),
                                             ),
@@ -259,19 +249,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                           FlatButton(
                                             child: FittedBox(
                                               fit: BoxFit.contain,
-                                              child: Text(
+                                              child: TextWidget(
                                                 "Delete Item",
-                                                style: TextStyle(
-                                                  fontFamily: 'Nunito Sans',
-                                                  fontSize:
-                                                      mediaQuery.size.width <
-                                                              350
-                                                          ? 14 *
-                                                              curScaleFactor *
-                                                              0.7
-                                                          : 14 * curScaleFactor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                FontWeight.bold,
+                                                mediaQuery.size.width < 350
+                                                    ? 14 * 0.7
+                                                    : 14,
+                                                TextAlign.center,
                                               ),
                                             ),
                                             onPressed: () {
@@ -284,19 +268,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                           FlatButton(
                                             child: FittedBox(
                                               fit: BoxFit.contain,
-                                              child: Text(
+                                              child: TextWidget(
                                                 "Mark Complete",
-                                                style: TextStyle(
-                                                  fontFamily: 'Nunito Sans',
-                                                  fontSize:
-                                                      mediaQuery.size.width <
-                                                              350
-                                                          ? 14 *
-                                                              curScaleFactor *
-                                                              0.7
-                                                          : 14 * curScaleFactor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                FontWeight.bold,
+                                                mediaQuery.size.width < 350
+                                                    ? 14 * 0.7
+                                                    : 14,
+                                                TextAlign.center,
                                               ),
                                             ),
                                             onPressed: () {
@@ -393,13 +371,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('Add Date'),
                     ),
                     FlatButton(
-                      child: Text(
+                      child: TextWidget(
                         "Add",
-                        style: TextStyle(
-                          fontFamily: 'Nunito Sans',
-                          fontSize: 18 * curScaleFactor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        FontWeight.bold,
+                        18,
+                        TextAlign.center,
                       ),
                       onPressed: () {
                         String title = titleController.text;
