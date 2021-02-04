@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'widgets/roundCheckboxButton.dart';
 import './widgets/text_widget.dart';
-import 'todo_model.dart';
+import 'models/todo_model.dart';
 
 const String todoBoxName = "todo";
 
